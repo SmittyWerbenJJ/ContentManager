@@ -25,3 +25,4 @@ jobs:
         with:
           TEST: false
           PACK: true
+          SOLUTION_FILE_PATH: ContentManager.csproj
