@@ -20,7 +20,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
         
       - name: Restore NuGet packages
-        run: nuget restore "$env:GITHUB_WORKSPACE\ContentManager.sln
+        run: nuget restore "$env:GITHUB_WORKSPACE\ContentManager.sln"
         
       - name: Build Solution
         run: msbuild "$env:GITHUB_WORKSPACE\ContentManager.sln" /p:Configuration=Release
