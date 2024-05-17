@@ -21,7 +21,7 @@ jobs:
         run: nuget restore ContentManager.sln
   
       - name: Build Solution
-        run: msbuild ContentManager.sln /p:Configuration=Release
+        run: msbuild ContentManager/ContentManager.sln /p:Configuration=Release
   
       - name: Archive build output
         uses: actions/upload-artifact@v2
