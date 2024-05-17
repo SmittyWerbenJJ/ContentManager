@@ -6,39 +6,39 @@ on:
 jobs:
   build:
     runs-on: windows-2019
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-      
-    - name: Setup .NET Framework
-      run: |
-        echo Installing .NET Framework 3.5 ...
-        Install-WindowsFeature -Name Net-Framework-Core
-      shell: powershell
-    - name: setup MsBuild
-      uses: microsoft/setup-msbuild@1.0.2
-    - name: Restore NuGet packages
-      run: nuget restore ContentManager.sln
-
-    - name: Build Solution
-      run: msbuild ContentManager.sln /p:Configuration=Release
-
-    - name: Archive build output
-      uses: actions/upload-artifact@v2
-      with:
-        name: application-build
-        path: bin\Release
-
-    - name: Create Zip File
-      run: |
-        $outputPath = "bin\Release"
-        $zipPath= "build.zip"
-        Compress-Archive -Path $outputPath -DestinationPath $zipPath
-      shell: powershell
-
-    - name: Upload Zip FIle
-      uses: actions/upload-artifact@v2
-      with: 
-        name: contentmanager-win_x64.zip
-        path: build.zip
-      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Setup .NET Framework
+        run: |
+          echo Installing .NET Framework 3.5 ...
+          Install-WindowsFeature -Name Net-Framework-Core
+        shell: powershell
+      - name: setup MsBuild
+        uses: microsoft/setup-msbuild@1.0.2
+      - name: Restore NuGet packages
+        run: nuget restore ContentManager.sln
+  
+      - name: Build Solution
+        run: msbuild ContentManager.sln /p:Configuration=Release
+  
+      - name: Archive build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: application-build
+          path: bin\Release
+  
+      - name: Create Zip File
+        run: |
+          $outputPath = "bin\Release"
+          $zipPath= "build.zip"
+          Compress-Archive -Path $outputPath -DestinationPath $zipPath
+        shell: powershell
+  
+      - name: Upload Zip FIle
+        uses: actions/upload-artifact@v2
+        with: 
+          name: contentmanager-win_x64.zip
+          path: build.zip
+        
