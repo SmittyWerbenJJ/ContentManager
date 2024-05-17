@@ -1,28 +1,44 @@
-name: .NET Core Build
+name: .NET Framework Build
 on:
   push:
     branches:
-      - master # Default release branch
-    tags:
-      - '*'
-
+      - master 
 jobs:
-  publish:
-    name: build, pack, test & publish
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DOTNET_NOLOGO: true
-    steps:
-      - uses: actions/checkout@main
+  build:
+    runs-on: windows-2019
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET Framework
+      run: |
+        echo Installing .NET Framework 3.5 ...
+        Install-WindowsFeature -Name Net-Framework-Core
+      shell: powershell
+    - name: setup MsBuild
+      uses: microsoft/setup-msbuild@1.0.2
+    - name: Restore NuGet packages
+      run: nuget restore ContentManager.sln
 
-      - name: Install latest .NET SDK
-        uses: Elskom/setup-latest-dotnet@main
+    - name: Build Solution
+      run: msbuild ContentManager.sln /p:Configuration=Release
 
-      - name: Restore, Build, test, and pack
-        uses: Elskom/build-dotnet@main
-        with:
-          TEST: false
-          PACK: true
-          SOLUTION_FILE_PATH: ContentManager.csproj
+    - name: Archive build output
+      uses: actions/upload-artifact@v2
+      with:
+        name: application-build
+        path: bin\Release
+
+    - name: Create Zip File
+      run: |
+        $outputPath = "bin\Release"
+        $zipPath= "build.zip"
+        Compress-Archive -Path $outputPath -DestinationPath $zipPath
+      shell: powershell
+
+    - name: Upload Zip FIle
+      uses: actions/upload-artifact@v2
+      with: 
+        name: contentmanager-win_x64.zip
+        path: build.zip
+      
