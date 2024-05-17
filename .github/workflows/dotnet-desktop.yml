@@ -16,7 +16,7 @@ jobs:
           Install-WindowsFeature -Name Net-Framework-Core
         shell: powershell
       - name: setup MsBuild
-        uses: microsoft/setup-msbuild@2
+        uses: microsoft/setup-msbuild@v2
       - name: Restore NuGet packages
         run: nuget restore ContentManager.sln
   
