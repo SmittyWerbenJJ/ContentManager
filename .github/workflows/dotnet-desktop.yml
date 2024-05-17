@@ -9,7 +9,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-          
+        with:
+          path: "C:/dev/ContentManager"
       - name: Setup .NET Framework
         run: |
           echo Installing .NET Framework 3.5 ...
@@ -21,18 +22,18 @@ jobs:
         run: nuget restore ContentManager.sln
   
       - name: Build Solution
-        run: msbuild $GITHUB_WORKSPACE/ContentManager.sln /p:Configuration=Release
+        run: msbuild "C:/dev/ContentManager/ContentManager.sln" /p:Configuration=Release
   
       - name: Archive build output
         uses: actions/upload-artifact@v2
         with:
           name: application-build
-          path: bin\Release
+          path: "C:/bin/Release"
   
       - name: Create Zip File
         run: |
-          $outputPath = "bin/Release"
-          $zipPath= "bin/build.zip"
+          $outputPath = "C:/bin/Release"
+          $zipPath= "C:/bin/build.zip"
           Compress-Archive -Path $outputPath -DestinationPath $zipPath
         shell: powershell
   
@@ -40,5 +41,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with: 
           name: contentmanager-win_x64.zip
-          path: "bin/build.zip"
+          path: "C:/bin/build.zip"
         
